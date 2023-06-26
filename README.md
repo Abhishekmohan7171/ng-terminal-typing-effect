@@ -1,6 +1,10 @@
-# TypingEffect
+# NgTerminalTypingEffect
+
+This basically creates a typing effect, like a terminal along with auto scroll depending on the height of the container for the code in the code tag , using the fucntion in the ts file.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.1.
+
+You can refer the git repo : [Click here](https://github.com/Abhishekmohan7171/ng-terminal-typing-effect)
 
 ## Development server
 
