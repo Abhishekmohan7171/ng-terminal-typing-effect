@@ -1,31 +1,105 @@
-# NgTerminalTypingEffect
+# NgTerminalTypingEffect 🔥
 
-This basically creates a typing effect, like a terminal along with auto scroll depending on the height of the container for the code in the code tag , using the fucntion in the ts file.
+This basically creates a typing effect, like a terminal along with auto scroll depending on the height of the container for the code in the code tag , using the fucntion in the ts file. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.1.
 
 You can refer the git repo : [Click here](https://github.com/Abhishekmohan7171/ng-terminal-typing-effect)
 
-## Development server
+## Documentation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### HTML File
 
-## Code scaffolding
+Enter the code for which you want the effect as shown below.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+<div class="editor ">
+  <pre>
+    <code #codeBlock class="code-block">
+      <!-- type the code here for which you want the typing effect -->
+    </code>
+  </pre>
+</div>
+```
 
-## Build
+### TS File
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```
+ngAfterViewInit() {
+      const target = this.codeBlockRef.nativeElement;
+      // Highlight the code
+      hljs.highlightBlock(target);
+      // Get all the child nodes
+      const children: Node[] = Array.from(target.childNodes);
+      target.innerText = '';
+      this.type(0, target, children);
+    }
 
-## Running unit tests
+    type(i: number, target: HTMLElement, children: Node[]) {
+      const charDelay = 25; //adjust typing speed here
+      // const typingSpeed = 5;
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+      //checking if its the first iteration
+      if (i === 0) {
+        target.style.visibility = 'visible';
+      }
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+      //checking whther the end of content so to effectively end the typing
+      if (i >= children.length) {
+        clearTimeout(this.typingTimeout);
+        return;
+      }
 
-## Further help
+      const content = children[i].textContent || ''; //stores content of the current child node being typed const content = (children[i].textContent || '').split(/\s+/);
+
+      let charIndex = 0;
+
+      const displayChars = () => {
+        if (charIndex < content.length) {
+          target.appendChild(document.createTextNode(content.charAt(charIndex))); //appends a newly created text node to the target element. The text node contains the character at the current charIndex position in the content string.
+          // Scroll the target element to bring the added character into view
+          target.scrollTop = target.scrollHeight;
+
+          hljs.highlightElement(target);
+
+          charIndex++;
+
+          this.typingTimeout = setTimeout(displayChars, charDelay);
+        } else {
+          if (content.includes('#')) { // a pause of 2.5 sec if the word is #
+            timer(2500).subscribe(()=>{
+              i++;
+              this.type(i,target, children)
+            })
+          } else {
+              i++;
+              this.type(i, target, children);
+          }
+        }
+      };
+      displayChars();
+    }
+```
+
+In the above code the last condition is the to give a pause after any desired word , there it is '#' , you can modify the code like you need.
+
+
+NOTE:Highlight Js is used here to highlight the syntax.Choose the desired theme in styles.css
+Example:
+```
+@import '~highlight.js/styles/monokai-sublime.css';
+```
+also in the ts file make sure to import highlight js.
+```
+import hljs from 'highlight.js';
+```
+
+NOTE: Here ViewChild is used to connect the function to the desired tag we want the effect.
+
+NOTE: Make sure this function is inside ngAfterViewInit(), also you can modify the typingSpeed variable for different typing speeds.
+
+
+
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
