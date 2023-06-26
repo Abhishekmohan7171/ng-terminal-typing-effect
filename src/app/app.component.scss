@@ -1,0 +1,33 @@
+/* Blinking cursor */
+.code-block:after{
+  content: "_";
+  animation: blink 300ms linear infinite alternate;
+}
+
+@-webkit-keyframes blink{
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
+
+@-moz-keyframes blink{
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
+
+@keyframes blink{
+  0%{opacity: 0;}
+  100%{opacity: 1;}
+}
+
+.code-block{
+  background: none;
+}
+
+.editor
+{
+  height: 300px;
+  width: 400px;
+  border: 1px;
+  border-radius: 12px;
+  background-color: black;
+}
